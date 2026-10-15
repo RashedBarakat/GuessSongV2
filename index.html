@@ -46,6 +46,11 @@ header p{margin:3px 0 0;color:var(--mut);font-size:13px}
 button.icon{width:40px;height:40px;padding:0;border-radius:12px;background:var(--card2);border:1px solid var(--line);
   color:var(--fg);font-size:16px;display:grid;place-items:center;box-shadow:none}
 button.icon:hover{background:rgba(255,255,255,.1)}
+button.pill{height:40px;padding:0 12px;border-radius:12px;background:var(--card2);border:1px solid var(--line);color:var(--fg);
+  font-size:14px;display:flex;align-items:center;gap:6px;box-shadow:none}
+button.pill:hover{background:rgba(255,255,255,.1)}
+.badge{min-width:22px;height:20px;padding:0 6px;border-radius:10px;background:var(--grad);font-size:11px;font-weight:700;display:grid;place-items:center}
+@media (max-width:480px){#artistsBtn .lbl{display:none}header p{display:none}}
 
 /* ---------- stats ---------- */
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
@@ -173,9 +178,42 @@ dialog ol{padding-left:18px;margin:0 0 12px;color:#d6d3ec;font-size:14px;line-he
 .ptable{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:16px;text-align:center;font-size:12px}
 .ptable div{background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:6px 0}
 .ptable b{display:block;font-size:16px;color:#fde68a}
-dialog button{width:100%}
+#help button{width:100%}
 
-@media (max-width:420px){.disc{width:180px;height:180px}.stat b{font-size:18px}header h1{font-size:22px}}
+/* ---------- artists picker ---------- */
+#picker{max-width:640px;padding:0;overflow:hidden}
+#picker[open]{display:flex;flex-direction:column;max-height:88vh}
+.ph{padding:18px 20px 12px;border-bottom:1px solid var(--line)}
+.ph h2{margin:0 0 12px;display:flex;align-items:center;gap:10px}
+.ph h2 small{font-size:13px;font-weight:500;color:var(--mut);margin-left:auto}
+.tabs{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+.tab{padding:8px 14px;border-radius:999px;background:var(--card2);border:1px solid var(--line);color:var(--mut);font-size:13px}
+.tab.on{background:var(--grad);color:#fff;border-color:transparent}
+.tools{display:flex;gap:8px}
+.tools input{flex:1;min-width:0;font:inherit;font-size:14px;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:rgba(0,0,0,.28);color:var(--fg);outline:none}
+.tools input:focus{border-color:var(--acc)}
+.tools button{padding:8px 12px;font-size:13px}
+.extras{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.toggle{display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;background:var(--card2);border:1px solid var(--line);font-size:13px;cursor:pointer;user-select:none}
+.toggle input{accent-color:var(--acc2);width:16px;height:16px;margin:0}
+.grid{flex:1;overflow-y:auto;padding:14px 20px;display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:10px;align-content:start}
+.grid h3{grid-column:1/-1;margin:6px 0 0;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);display:flex;justify-content:space-between;align-items:center}
+.grid h3 button{font-size:11px;padding:4px 10px;letter-spacing:0;text-transform:none}
+.ac{position:relative;cursor:pointer;border-radius:16px;padding:12px 8px 10px;text-align:center;background:var(--card2);border:1px solid var(--line);transition:.2s;user-select:none}
+.ac:hover{background:rgba(255,255,255,.08);transform:translateY(-2px)}
+.ac .pic{width:66px;height:66px;margin:0 auto 8px;border-radius:50%;background:linear-gradient(135deg,#3b2d6b,#5b2150) center/cover;
+  display:grid;place-items:center;font-weight:800;font-size:22px;color:rgba(255,255,255,.75);filter:grayscale(.85) brightness(.7);transition:.25s}
+.ac .nm{font-size:12.5px;line-height:1.25;color:var(--mut);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ac .ck{position:absolute;top:8px;right:8px;width:20px;height:20px;border-radius:50%;border:2px solid rgba(255,255,255,.25);display:grid;place-items:center;font-size:11px;color:transparent;transition:.2s}
+.ac.on{border-color:var(--acc);background:rgba(139,92,246,.14);box-shadow:0 0 0 1px var(--acc) inset}
+.ac.on .pic{filter:none;box-shadow:0 0 0 3px var(--acc2),0 8px 20px rgba(236,72,153,.35)}
+.ac.on .nm{color:var(--fg)}
+.ac.on .ck{background:var(--grad);border-color:transparent;color:#fff}
+.empty{grid-column:1/-1;text-align:center;color:var(--mut);padding:30px 0}
+.pf{padding:12px 20px;border-top:1px solid var(--line);display:flex;gap:10px;align-items:center}
+.pf span{color:var(--mut);font-size:13px;flex:1}
+
+@media (max-width:420px){.disc{width:180px;height:180px}.stat b{font-size:18px}header h1{font-size:22px}.grid{grid-template-columns:repeat(3,1fr);padding:12px}}
 @media (prefers-reduced-motion:reduce){.blob,body.playing .eq i,.spin{animation:none!important}}
 </style>
 </head>
@@ -189,6 +227,7 @@ dialog button{width:100%}
     <div class="logo">🎧</div>
     <div><h1>Guess the <span>Song</span></h1><p>Listen. Guess. Beat your streak.</p></div>
     <div class="hbtns">
+      <button class="pill" id="artistsBtn" title="Choose artists">🎤 <span class="lbl">Artists</span> <span class="badge" id="artBadge">All</span></button>
       <button class="icon" id="sfx" title="Sound effects"></button>
       <button class="icon" id="helpBtn" title="How to play">?</button>
     </div>
@@ -243,6 +282,7 @@ dialog button{width:100%}
 <dialog id="help">
   <h2>🎵 How to play</h2>
   <ol>
+    <li>Tap <b>🎤 Artists</b> to choose who you want to hear.</li>
     <li>Press <b>Play</b> to hear a short clip of a mystery song.</li>
     <li>Type the song title (English or Arabic) and hit <b>Guess</b>.</li>
     <li>Wrong or skipped? You unlock a longer clip.</li>
@@ -252,6 +292,24 @@ dialog button{width:100%}
     <div>1s<b>5</b></div><div>3s<b>4</b></div><div>5s<b>3</b></div><div>15s<b>2</b></div><div>30s<b>1</b></div>
   </div>
   <button id="helpClose">Let's play</button>
+</dialog>
+
+<dialog id="picker">
+  <div class="ph">
+    <h2>🎤 Choose artists <small id="pkCount"></small></h2>
+    <div class="tabs" id="tabs"></div>
+    <div class="tools">
+      <input id="pkSearch" placeholder="Search artists…" autocomplete="off" dir="auto">
+      <button class="sec" id="pkAll">Select all</button>
+      <button class="sec" id="pkNone">Clear</button>
+    </div>
+    <div class="extras">
+      <label class="toggle"><input type="checkbox" id="optSongs"> ⭐ Hand-picked extras</label>
+      <label class="toggle"><input type="checkbox" id="optChart"> 🌍 Global Top 100 chart</label>
+    </div>
+  </div>
+  <div class="grid" id="pkGrid"></div>
+  <div class="pf"><span id="pkHint"></span><button class="sec" id="pkCancel">Cancel</button><button id="pkSave">Save &amp; play</button></div>
 </dialog>
 
 <script src="songs.js"></script>
@@ -290,31 +348,54 @@ function isMatch(guess,answers){
     return g===n || lev(g,n)<=Math.floor(n.length/6);});
 }
 
-// ---------- song pool ----------
+// ---------- song pool & artist selection ----------
+const GROUPS=window.ARTIST_GROUPS||{"My artists":window.ARTISTS||[]};
+const ALL_ARTISTS=[...new Set(Object.values(GROUPS).flat())];
+const ALIASES=window.ARTIST_ALIASES||{};
+const blocked=a=>(window.BLOCKLIST||[]).some(b=>b.toLowerCase()===(a||"").toLowerCase());
+const has=(hay,needle)=>{const n=norm(needle);return !!n&&(" "+hay+" ").includes(" "+n+" ");};
+// tie each hand-picked song to every known artist named in its search text
+const SONG_META=(window.SONGS||[]).map(x=>{const h=norm(x.q);
+  return {x,artists:ALL_ARTISTS.filter(a=>has(h,a)||(ALIASES[a]||[]).some(al=>has(h,al)))};});
+
+let sel={artists:store.get("artists",null)||ALL_ARTISTS.slice(),songs:store.get("optSongs",true),chart:store.get("optChart",!!window.USE_CHART)};
+sel.artists=sel.artists.filter(a=>ALL_ARTISTS.includes(a));
+let SRC=[];
 function sources(){
-  const s=[];
-  (window.ARTISTS||[]).forEach(a=>s.push({t:"artist",v:a}));
-  (window.SONGS||[]).forEach(x=>s.push({t:"song",v:x}));
-  if(window.USE_CHART)s.push({t:"chart",v:"chart"},{t:"chart",v:"chart"},{t:"chart",v:"chart"});
+  const on=new Set(sel.artists), s=[];
+  sel.artists.forEach(a=>s.push({t:"artist",v:a}));
+  SONG_META.forEach(m=>{ if(m.artists.length?m.artists.some(a=>on.has(a)):sel.songs)s.push({t:"song",v:m.x}); });
+  if(sel.chart)for(let i=0;i<Math.max(3,Math.round(s.length*.1));i++)s.push({t:"chart",v:"chart"});
   return s;
 }
-const SRC=sources();
-const blocked=a=>(window.BLOCKLIST||[]).some(b=>b.toLowerCase()===(a||"").toLowerCase());
+function rebuild(){SRC=sources();
+  const n=sel.artists.length;$("artBadge").textContent=n===ALL_ARTISTS.length?"All":n;}
+
+// artist info (Deezer id + picture), cached in localStorage
+const artInfo=store.get("artInfo",{}); let artSaveT;
+async function artistInfo(name){
+  if(artInfo[name])return artInfo[name];
+  const r=await dz("/search/artist?q="+encodeURIComponent(name)+"&limit=1");
+  const a=r.data&&r.data[0];
+  artInfo[name]=a?{id:a.id,name:a.name,pic:a.picture_medium||""}:{id:0,pic:""};
+  clearTimeout(artSaveT);artSaveT=setTimeout(()=>store.set("artInfo",artInfo),800);
+  return artInfo[name];
+}
 
 async function loadSource(s){
   const key=s.t+":"+(s.t==="song"?s.v.q:s.v);
   if(cache[key])return cache[key];
   let tracks=[];
   if(s.t==="artist"){
-    const found=await dz("/search/artist?q="+encodeURIComponent(s.v)+"&limit=1");
-    const art=found.data&&found.data[0]; if(!art)return cache[key]=[];
+    const art=await artistInfo(s.v); if(!art.id)return cache[key]=[];
+    const want=[s.v.toLowerCase(),(art.name||"").toLowerCase()];
     const calls=[dz("/artist/"+art.id+"/top?limit=100")];
     for(const i of [0,100,200])calls.push(dz("/search?q="+encodeURIComponent('artist:"'+s.v+'"')+"&limit=100&index="+i).catch(()=>({data:[]})));
     const res=await Promise.all(calls.map(c=>c.catch(()=>({data:[]}))));
     const seen=new Set();
     res.forEach(r=>(r.data||[]).forEach(t=>{
       const names=[t.artist&&t.artist.name].concat((t.contributors||[]).map(c=>c.name)).map(x=>(x||"").toLowerCase());
-      if(!seen.has(t.id)&&t.readable!==false&&names.includes(s.v.toLowerCase())){seen.add(t.id);tracks.push(t);}
+      if(!seen.has(t.id)&&t.readable!==false&&want.some(w=>names.includes(w))){seen.add(t.id);tracks.push(t);}
     }));
   } else if(s.t==="song"){
     const r=await dz("/search?q="+encodeURIComponent(s.v.q)+"&limit=1");
@@ -334,6 +415,8 @@ async function newRound(){
   $("skip").disabled=false;$("go").disabled=false;$("history").innerHTML="";$("mystery").style.display="";
   $("disc").className="disc loading";$("backdrop").classList.remove("show");$("eq").style.display="";
   setMsg("Finding a song…");drawBars();updatePlay();updateProgress(0);
+  if(!SRC.length){$("disc").classList.remove("loading");
+    setMsg("No artists selected — open 🎤 Artists to pick some.","bad");$("next").disabled=false;return;}
   for(let tries=0;tries<12;tries++){
     try{
       const s=SRC[Math.floor(Math.random()*SRC.length)];
@@ -455,7 +538,7 @@ $("next").onclick=()=>{results=[];newRound();};
 // ---------- keyboard shortcuts ----------
 document.addEventListener("keydown",e=>{
   const tag=e.target.tagName;
-  if((tag==="INPUT"&&e.target.type!=="range")||$("help").open)return;
+  if((tag==="INPUT"&&e.target.type!=="range")||$("help").open||$("picker").open)return;
   if(e.code==="Space"&&tag!=="BUTTON"){e.preventDefault();$("play").click();}
   else if(e.key.toLowerCase()==="n"&&!$("next").disabled)$("next").click();
 });
@@ -512,7 +595,72 @@ $("helpBtn").onclick=()=>$("help").showModal();
 $("helpClose").onclick=()=>$("help").close();
 if(!store.get("seenHelp",false)){store.set("seenHelp",true);setTimeout(()=>$("help").showModal(),400);}
 
-renderSfx();renderStats();
+// ---------- artist picker ----------
+let draft, tab="All";
+const TABS=["All",...Object.keys(GROUPS),"Selected"];
+const esc=t=>String(t).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+// pictures load lazily as cards scroll into view
+const picIO=new IntersectionObserver(es=>es.forEach(async e=>{
+  if(!e.isIntersecting)return;picIO.unobserve(e.target);
+  const el=e.target;try{const i=await artistInfo(el.dataset.n);if(i.pic){el.style.backgroundImage=`url("${i.pic}")`;el.textContent="";}}catch(_){}
+}),{rootMargin:"120px"});
+
+function openPicker(){
+  draft={artists:new Set(sel.artists),songs:sel.songs,chart:sel.chart};
+  $("optSongs").checked=draft.songs;$("optChart").checked=draft.chart;$("pkSearch").value="";
+  renderTabs();$("picker").showModal();renderGrid();
+}
+function renderTabs(){$("tabs").innerHTML=TABS.map(t=>`<button class="tab${t===tab?" on":""}" data-t="${esc(t)}">${esc(t)}${GROUPS[t]?" · "+GROUPS[t].length:""}</button>`).join("");}
+function visible(){
+  const q=norm($("pkSearch").value);
+  const groups=tab==="All"?Object.entries(GROUPS):tab==="Selected"?[["Selected",ALL_ARTISTS.filter(a=>draft.artists.has(a))]]:[[tab,GROUPS[tab]]];
+  return groups.map(([g,l])=>[g,l.filter(a=>!q||norm(a).includes(q))]).filter(([,l])=>l.length);
+}
+function card(a){
+  const i=artInfo[a], on=draft.artists.has(a), pic=i&&i.pic;
+  return `<div class="ac${on?" on":""}" data-a="${esc(a)}" role="checkbox" aria-checked="${on}" tabindex="0">
+    <span class="ck">✓</span><div class="pic" data-n="${esc(a)}"${pic?` style="background-image:url('${esc(pic)}')"`:""}>${pic?"":esc(a.trim()[0]||"?")}</div>
+    <div class="nm" dir="auto">${esc(a)}</div></div>`;
+}
+function renderGrid(){
+  const v=visible();
+  $("pkGrid").innerHTML=v.length?v.map(([g,l])=>`<h3><span>${esc(g)} · ${l.length}</span><button class="sec" data-g="${esc(g)}">Toggle group</button></h3>`+l.map(card).join("")).join("")
+    :`<div class="empty">No artists match your search.</div>`;
+  $("pkGrid").querySelectorAll(".pic").forEach(p=>{if(!p.style.backgroundImage)picIO.observe(p);});
+  updateCount();
+}
+function updateCount(){
+  $("pkCount").textContent=`${draft.artists.size} / ${ALL_ARTISTS.length} selected`;
+  const ok=draft.artists.size||draft.songs||draft.chart;
+  $("pkHint").textContent=ok?"Saved on this device.":"Pick at least one artist or source.";
+  $("pkSave").disabled=!ok;
+}
+function toggleCard(c){
+  const a=c.dataset.a;draft.artists.has(a)?draft.artists.delete(a):draft.artists.add(a);
+  const on=draft.artists.has(a);c.classList.toggle("on",on);c.setAttribute("aria-checked",on);updateCount();
+}
+$("pkGrid").addEventListener("click",e=>{
+  const gb=e.target.closest("button[data-g]");
+  if(gb){const l=visible().find(([g])=>g===gb.dataset.g)[1];const all=l.every(a=>draft.artists.has(a));
+    l.forEach(a=>all?draft.artists.delete(a):draft.artists.add(a));renderGrid();return;}
+  const c=e.target.closest(".ac");if(c)toggleCard(c);
+});
+$("pkGrid").addEventListener("keydown",e=>{const c=e.target.closest(".ac");if(c&&(e.key===" "||e.key==="Enter")){e.preventDefault();toggleCard(c);}});
+$("tabs").onclick=e=>{const b=e.target.closest(".tab");if(!b)return;tab=b.dataset.t;renderTabs();renderGrid();};
+$("pkSearch").oninput=renderGrid;
+$("pkAll").onclick=()=>{visible().forEach(([,l])=>l.forEach(a=>draft.artists.add(a)));renderGrid();};
+$("pkNone").onclick=()=>{visible().forEach(([,l])=>l.forEach(a=>draft.artists.delete(a)));renderGrid();};
+$("optSongs").onchange=e=>{draft.songs=e.target.checked;updateCount();};
+$("optChart").onchange=e=>{draft.chart=e.target.checked;updateCount();};
+$("pkCancel").onclick=()=>$("picker").close();
+$("pkSave").onclick=()=>{
+  sel={artists:ALL_ARTISTS.filter(a=>draft.artists.has(a)),songs:draft.songs,chart:draft.chart};
+  store.set("artists",sel.artists);store.set("optSongs",sel.songs);store.set("optChart",sel.chart);
+  $("picker").close();rebuild();results=[];newRound();
+};
+$("artistsBtn").onclick=openPicker;
+
+renderSfx();renderStats();rebuild();
 newRound();
 </script>
 </body>
